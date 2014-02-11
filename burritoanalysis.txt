@@ -1,0 +1,8 @@
+based on the description here:
+https://github.com/CunningLogic/BurritoRoot
+
+the service that hosts the com.lab126.services.EasterEggReceiver broadcast
+receiver is non-standard (not listed as a known API) and is not in the
+the exploits container since its something running as a standard system
+service added by the non-google vendor. Thus, it is forwarded to
+the CVM. This has no effect on adb on the host and the exploit fails.
