@@ -1,0 +1,8 @@
+<resources>
+
+    <string name="app_name">HTC DNA SuperCID</string>
+    <string name="hello_world">You should now have SuperCID.  Please reboot to bootloader and execute &quot;fastboot oem readcid&quot;.  If it still shows CWS__001 then you will need to reboot and try this app again.</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">BreakSuidDiag</string>
+
+</resources>

@@ -1,0 +1,3 @@
+INDEX VERSION 1.126+/Users/sbeaupre/android/workspace1/.metadata/.plugins/org.eclipse.jdt.core
+2117143491.index
+765453901.index

